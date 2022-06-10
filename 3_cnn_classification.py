@@ -226,7 +226,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--model-wts-path',
         type=str,
-        default='./checkpoints/resnet18-5c106cde.pth',
+        default='resnet18.pth',
         help='Pretrained weights. ')
     args = parser.parse_args()
 
@@ -236,11 +236,8 @@ if __name__ == '__main__':
     log = setup_logger('logger_name', os.path.join(session_path, 'log.txt'))
     num_epochs = 10
     step_size = 5
-    lr = 0.001
-    if args.weighted_loss:
-        lr = 0.00001 # Descreased by 100 for weighted loss
+    lr = 0.00001
     batch_size=64
-    plot_datasets = False
     print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d' % (lr, num_epochs, step_size), log=log)
 
     model_wts = torch.load(args.model_wts_path)
@@ -290,22 +287,9 @@ if __name__ == '__main__':
     else:
         class_weights = None
 
-    # Get a batch of training data and plot the first 10 images
-    if plot_datasets:
-        numb_examples = 8
-        inputs, classes = next(iter(dataloaders['train']))
-        out = torchvision.utils.make_grid(inputs[:numb_examples])
-        imshow(out, title=', '.join([class_names[x] for x in classes[:numb_examples]]), save_path=os.path.join(session_path, 'samples_train.svg'))
-
-        inputs, classes = next(iter(dataloaders['validation']))
-        out = torchvision.utils.make_grid(inputs[:8])
-        imshow(out, title=', '.join([class_names[x] for x in classes[:numb_examples]]), save_path=os.path.join(session_path, 'samples_validation.svg'))
-
-        inputs, classes = next(iter(dataloaders['test']))
-        out = torchvision.utils.make_grid(inputs[:8])
-        imshow(out, title=', '.join([class_names[x] for x in classes[:numb_examples]]), save_path=os.path.join(session_path, 'samples_test.svg'))
-
-    # Pretrained model finetune on our database - all weights are updated
+    ##########################
+    ## ConvNet is finetuned ##
+    ##########################
     print_and_log('ConvNet finetuned', log=log)
     model_ft = models.resnet18()
     model_ft.load_state_dict(model_wts)

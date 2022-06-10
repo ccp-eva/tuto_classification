@@ -1,5 +1,6 @@
 import os
 from argparse import ArgumentParser
+import datetime
 from utils import *
 
 '''
@@ -54,8 +55,10 @@ def main():
         help='Output where the frames will be saved following same tree than the video folder. ')
     
     args = parser.parse_args()
+    os.makedirs('logs', exist_ok=True)
+    log = setup_logger('my_log', os.path.join('logs', 'create_database_%s.log' % (datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))))
+
     list_categories = [f for f in os.listdir(args.video_input) if os.path.isdir(os.path.join(args.video_input,f))]
-    log = setup_logger('my_log', 'create_database_%s.log' % (datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')))
     print_and_log("There are %d categories: %s" % (len(list_categories), ', '.join(list_categories)), log=log)
 
     os.makedirs(args.output_folder, exist_ok=True)

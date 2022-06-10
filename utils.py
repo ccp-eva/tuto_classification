@@ -1,4 +1,3 @@
-import mahotas
 import cv2
 print('OpenCV version: ', cv2.__version__)
 cv2.setNumThreads(0)
@@ -295,4 +294,4 @@ def plot_data_distribution(database, list_categories):
     ax.set_title('Samples repartition')
     ax.set_xticks(X+0.25, sorted_list_of_category)
     ax.legend(labels=total_samples_per_set.keys())
-    plt.savefig('%s_samples_distribution.svg',bbox_inches='tight')
+    plt.savefig('%s_samples_distribution.svg' % (database),bbox_inches='tight')

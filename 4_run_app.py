@@ -11,7 +11,7 @@ import datetime
 import logging
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
-from PIL import Image
+# from PIL import Image
 from matplotlib import cm
 from argparse import ArgumentParser
 from utils import *
