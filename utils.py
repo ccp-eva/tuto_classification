@@ -7,6 +7,7 @@ import numpy as np
 import sys
 import platform
 import matplotlib
+import json
 # To be able to save figure using screen with matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -105,6 +106,7 @@ def get_terminal_size():
     def _get_terminal_size_windows():
         try:
             from ctypes import windll, create_string_buffer
+            import struct
             h = windll.kernel32.GetStdHandle(-12)
             csbi = create_string_buffer(22)
             res = windll.kernel32.GetConsoleScreenBufferInfo(h, csbi)
@@ -120,6 +122,8 @@ def get_terminal_size():
 
     def _get_terminal_size_tput():
         try:
+            import subprocess
+            import shlex
             cols = int(subprocess.check_call(shlex.split('tput cols')))
             rows = int(subprocess.check_call(shlex.split('tput lines')))
             return (cols, rows)

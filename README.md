@@ -23,7 +23,7 @@ You should have downloaded the github repo. This repo should contain several pyt
 
 ``` bash
 # Create the conda environment (you can change the name and location)
-conda env create --prefix ./env --file environment_with_versions.yml # or environment.yml
+conda env create --prefix ./env --file environment.yml # or environment_with_versions.yml
 # Activate the conda environment
 conda activate ./env
 ```
@@ -69,6 +69,37 @@ python 4_run_app.py [path_of_you_trained_model_folder]
 
 ```
 
+## Commun issues
+
+- Import error with PIL:
+``` bash
+ImportError: cannot import name 'PILLOW_VERSION' from 'PIL' (/home/pemartin/Documents/MPI/Projects/tuto_classification/env/lib/python3.7/site-packages/PIL/__init__.py)
+```
+Solve by running:
+``` bash
+conda install -c anaconda pillow=6.1
+```
+
+- images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into account with opencv.
+
+- Error showing image opencv when running script 4:
+``` bash
+cv2.error: OpenCV(3.4.2) /tmp/build/80754af9/opencv-suite_1535558553474/work/modules/highgui/src/window.cpp:632: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+```
+Solve by running:
+``` bash
+conda remove opencv
+# If python version > 3.6
+conda install python=3.6
+conda install -c menpo opencv3
+```
+The torch version may have been affected. Therefore you will have to re-run script 3 before be able to use script 4.
+
+- CUDA Error. There may come from various reason. Then use cpu in script 3 and 4 by setting the device variable to cpu.
+```
+python 3_cnn_classification.py my_dataset_framewise_split --device cpu
+python 4_run_app.py [path_of_you_trained_model_folder] --device cpu
+```
 
 # Further steps
 

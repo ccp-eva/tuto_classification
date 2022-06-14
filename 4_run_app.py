@@ -1,17 +1,14 @@
 import os
-
-cv2.setNumThreads(0)
 import torch
 print('PyTorch version: ', torch.__version__)
 from torchvision import models, transforms
 import copy
-import json
 import time
 import datetime
 import logging
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
-# from PIL import Image
+from PIL import Image
 from matplotlib import cm
 from argparse import ArgumentParser
 from utils import *
@@ -40,17 +37,17 @@ class cnn_model():
     def get_class_from_image(self, img):
         with torch.no_grad():
             # Convertion from opencv to PIL
-            # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            # im_pil = Image.fromarray(img)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(img)
 
-            # im_pil = self.transpose(im_pil)
-            # im_pil = im_pil.to(self.device)
-            # im_pil = im_pil.unsqueeze(0)
-            img = self.transpose(img)
-            img = img.to(self.device)
-            img = img.unsqueeze(0)
+            im_pil = self.transpose(im_pil)
+            im_pil = im_pil.to(self.device)
+            im_pil = im_pil.unsqueeze(0)
+            # img = self.transpose(img)
+            # img = img.to(self.device)
+            # img = img.unsqueeze(0)
 
-            outputs = self.model(img)
+            outputs = self.model(im_pil)
             outputs_normalized = torch.nn.functional.softmax(outputs, dim=1)
             _, preds = torch.max(outputs, 1)
 
@@ -64,7 +61,7 @@ class cnn_model():
 def main():
     parser = ArgumentParser()
     parser.add_argument(
-        'model-path',
+        'model_path',
         type=str,
         help='Path to the model to use. ')    
     parser.add_argument(
@@ -132,7 +129,7 @@ def main():
     # Classification model
     # load model weights
     class_names = np.load(os.path.join(args.model_path, 'class_names.npy')).tolist()
-    classification_model = cnn_model(os.path.join(args.model_path, 'model_ft.pth'), class_names, device=args.device)
+    classification_model = cnn_model(os.path.join(args.model_path, 'resnet18_finetuned_loss.pth'), class_names, device=args.device)
     print_and_log('CNN model loaded', log)
 
     # Video source - can be camera index number given by 'ls /dev/video*
@@ -178,12 +175,9 @@ def main():
         pred, score = classification_model.get_class_from_image(frame)
         total_time_class += time.time() - tmp_time
 
-        
         json_data = {
             'time': str(datetime.datetime.now()),
             'image_id': idx,                
-            'detection': [round(float(v),1) for v in [x1, y1, x2, y2]],
-            'det_score' : round(float(score_det),3),
             'classification': {
                 'pred': pred,
                 'score': round(float(score),3)
@@ -191,7 +185,7 @@ def main():
         list_results.append(json_data)
 
         with open('current_detection.json', 'w') as f:
-            json.dump(det, f)
+            json.dump(list_results, f)
                     
         if args.save_json_file:
             write_json(list_results, json_file)
@@ -210,7 +204,7 @@ def main():
             colormap_idx = class_names.index(pred)
             color = [int(255*i) for i in colormap(colormap_idx)[:3]]
             # Write text on image
-            cv2.putText(img_vis, '%s (%.3f)' % (pred, score), (0,0), 0, 0.3, color)
+            cv2.putText(img_vis, '%s (%.3f)' % (pred, score), ((img_vis.shape[1]//2,img_vis.shape[0]//2)), 0, 1, color, 2)
             if args.save_demo_images:
                 cv2.imwrite(os.path.join(demo_images_path, '%08d.png' % (idx)), img_vis)
             if args.show_demo:

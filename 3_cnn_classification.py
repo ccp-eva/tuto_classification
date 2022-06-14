@@ -42,7 +42,7 @@ def imshow(inp, title=None, save_path=None, show=False):
         plt.close('all')
         
 
-def visualize_model(model, save_path, num_images=9, show=False):
+def visualize_model(model, save_path, num_images=9, show=False, device='cpu'):
     # was_training = model.training
     model.eval()
     images_so_far = 0
@@ -73,8 +73,11 @@ def visualize_model(model, save_path, num_images=9, show=False):
                     return
         # model.train(mode=was_training)
 
-def test_model(model, criterion, log=None, model_path='model'):
+def test_model(model, criterion, log=None, model_path='model', device='cpu'):
     since = time.time()
+    print_and_log('Testing model %s' % (model_path), log)
+    model_wts = torch.load(model_path+'.pth', map_location=device)
+    model.load_state_dict(model_wts)
     model.eval()   # Set model to evaluate mode
 
     running_loss = 0.0
@@ -122,7 +125,7 @@ def test_model(model, criterion, log=None, model_path='model'):
 
     return model
 
-def train_model(model, criterion, optimizer, scheduler, num_epochs=25, log=None, model_path='model'):
+def train_model(model, criterion, optimizer, scheduler, num_epochs=25, log=None, model_path='model', device='cpu'):
     since = time.time()
     best_model_wts_loss = copy.deepcopy(model.state_dict())
     best_model_wts_acc = copy.deepcopy(model.state_dict())
@@ -206,8 +209,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25, log=None,
     model_loss = copy.deepcopy(model)
     model.load_state_dict(best_model_wts_acc)
     model_loss.load_state_dict(best_model_wts_loss)
-    torch.save(best_model_wts_acc, '%s_acc_weigths.pth' % (model_path))
-    torch.save(best_model_wts_loss, '%s_loss_weigths.pth' % (model_path))
+    torch.save(best_model_wts_acc, '%s_acc.pth' % (model_path))
+    torch.save(best_model_wts_loss, '%s_loss.pth' % (model_path))
 
     return model, model_loss
 
@@ -228,6 +231,10 @@ if __name__ == '__main__':
         type=str,
         default='resnet18.pth',
         help='Pretrained weights. ')
+    parser.add_argument(
+        '--device',
+        default=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
+        help='Device for inference. ')
     args = parser.parse_args()
 
     reset_session()
@@ -236,6 +243,7 @@ if __name__ == '__main__':
     log = setup_logger('logger_name', os.path.join(session_path, 'log.txt'))
     num_epochs = 10
     step_size = 5
+    # lr = 0.001
     lr = 0.00001
     batch_size=64
     print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d' % (lr, num_epochs, step_size), log=log)
@@ -248,6 +256,8 @@ if __name__ == '__main__':
         'train': transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
+            transforms.RandomGrayscale(),
+            transforms.RandomRotation(180),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]),
@@ -278,19 +288,16 @@ if __name__ == '__main__':
 
     print_and_log('Classes: %s' % (', '.join(class_names)), log=log)
 
-    # CPU or GPU
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
-    # device = 'cpu'
-
     if args.weighted_loss: # Would be equal to one if even distribution accross the classes
-        class_weights = torch.from_numpy(len(image_datasets['train'])/(np.array([len(getListOfFiles(os.path.join(args.database,'train',name))) for name in class_names])+1)/len(class_names)).float().to(device)
+        class_weights = torch.from_numpy(len(image_datasets['train'])/(np.array([len(getListOfFiles(os.path.join(args.database,'train',name))) for name in class_names])+1)/len(class_names)).float().to(args.device)
     else:
         class_weights = None
 
     ##########################
     ## ConvNet is finetuned ##
     ##########################
-    print_and_log('ConvNet finetuned', log=log)
+    print_and_log('ResNet18 finetuned', log=log)
+    model_name = 'resnet18_finetuned'
     model_ft = models.resnet18()
     model_ft.load_state_dict(model_wts)
 
@@ -299,7 +306,7 @@ if __name__ == '__main__':
     # Set the last layer lenght to the number of classes
     model_ft.fc = nn.Linear(num_ftrs, len(class_names))
 
-    model_ft = model_ft.to(device)
+    model_ft = model_ft.to(args.device)
 
     criterion = nn.CrossEntropyLoss(weight=class_weights, reduction='sum')
 
@@ -310,20 +317,29 @@ if __name__ == '__main__':
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=step_size, gamma=0.1)
 
     ## Train and evaluate ##
-    model_ft, model_ft_loss = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=num_epochs, log=log, model_path=os.path.join(session_path, 'model_ft'))
+    model_ft, model_ft_loss = train_model(
+        model_ft,
+        criterion,
+        optimizer_ft,
+        exp_lr_scheduler,
+        num_epochs=num_epochs,
+        log=log,
+        model_path=os.path.join(session_path, model_name),
+        device=args.device)
 
     # Test the model
-    test_model(model_ft, criterion, log=log, model_path=os.path.join(session_path, 'model_ft'))
-    visualize_model(model_ft, os.path.join(session_path, 'model_ft_vis.svg'))
+    test_model(model_ft, criterion, log=log, model_path=os.path.join(session_path, model_name + '_acc'), device=args.device)
+    visualize_model(model_ft, os.path.join(session_path, model_name + '_acc.svg'), device=args.device)
 
-    test_model(model_ft_loss, criterion, log=log, model_path=os.path.join(session_path, 'model_ft_loss'))
-    visualize_model(model_ft_loss, os.path.join(session_path, 'model_ft_loss_vis.svg'))
+    test_model(model_ft_loss, criterion, log=log, model_path=os.path.join(session_path, model_name + '_loss'), device=args.device)
+    visualize_model(model_ft_loss, os.path.join(session_path, model_name + '_loss.svg'), device=args.device)
 
     ########################################
     ## ConvNet as fixed feature extractor ##
     ########################################
     reset_session()
-    print_and_log('\n\nConvNet as fixed feature extractor', log=log)
+    print_and_log('\n\nResNet18 as fixed feature extractor', log=log)
+    model_name = 'resnet18_feat_extractor'
     model_conv = torchvision.models.resnet18()
     model_conv.load_state_dict(model_wts)
     for param in model_conv.parameters():
@@ -335,7 +351,7 @@ if __name__ == '__main__':
     # Set the last layer lenght to the number of classes
     model_conv.fc = nn.Linear(num_ftrs, len(class_names))
 
-    model_conv = model_conv.to(device)
+    model_conv = model_conv.to(args.device)
 
     criterion = nn.CrossEntropyLoss(weight=class_weights, reduction='sum')
 
@@ -345,14 +361,22 @@ if __name__ == '__main__':
 
     # Decay LR by a factor of 0.1 every step_size epochs
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=step_size, gamma=0.1)
-    model_conv, model_conv_loss = train_model(model_conv, criterion, optimizer_conv, exp_lr_scheduler, num_epochs=num_epochs, log=log, model_path=os.path.join(session_path, 'model_fextractor'))
+    model_conv, model_conv_loss = train_model(
+        model_conv,
+        criterion,
+        optimizer_conv,
+        exp_lr_scheduler,
+        num_epochs=num_epochs,
+        log=log,
+        model_path=os.path.join(session_path, model_name),
+        device=args.device)
 
     # Test the model
-    test_model(model_conv, criterion, log=log, model_path=os.path.join(session_path, 'model_fextractor'))
-    visualize_model(model_conv, os.path.join(session_path, 'model_fextractor_vis.svg'))
+    test_model(model_conv, criterion, log=log, model_path=os.path.join(session_path, model_name + '_acc'), device=args.device)
+    visualize_model(model_conv, os.path.join(session_path, model_name + '_acc.svg'), device=args.device)
 
-    test_model(model_conv_loss, criterion, log=log, model_path=os.path.join(session_path, 'model_fextractor_loss'))
-    visualize_model(model_conv_loss, os.path.join(session_path, 'model_fextractor_loss_vis.svg'))
+    test_model(model_conv_loss, criterion, log=log, model_path=os.path.join(session_path, model_name + '_loss'), device=args.device)
+    visualize_model(model_conv_loss, os.path.join(session_path, model_name + '_loss.svg'), device=args.device)
     
     print_and_log(message='\n\nFinished', log=log)
     close_log(log)
