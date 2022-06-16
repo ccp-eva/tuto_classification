@@ -22,40 +22,35 @@ class cnn_model():
         num_ftrs = self.model.fc.in_features
         # Set the last layer lenght to the number of classes
         self.model.fc = torch.nn.Linear(num_ftrs, len(class_names))
-        self.model = self.model.to(device)
         model_wts = torch.load(model_wts_path)
         self.model.load_state_dict(model_wts)
+        self.model = self.model.to(device)
         self.class_names = class_names
-        self.transpose = transforms.Compose([
+        self.transforms = transforms.Compose([
             transforms.Resize([224,224]),
             # transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ])
         self.device = device
+        self.model.eval()
 
     def get_class_from_image(self, img):
         with torch.no_grad():
             # Convertion from opencv to PIL
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             im_pil = Image.fromarray(img)
-
-            im_pil = self.transpose(im_pil)
+            im_pil = self.transforms(im_pil)
             im_pil = im_pil.to(self.device)
             im_pil = im_pil.unsqueeze(0)
-            # img = self.transpose(img)
-            # img = img.to(self.device)
-            # img = img.unsqueeze(0)
 
             outputs = self.model(im_pil)
             outputs_normalized = torch.nn.functional.softmax(outputs, dim=1)
-            _, preds = torch.max(outputs, 1)
-
-            score = outputs[0][preds[0]].item()
+            score_normalized, preds = torch.max(outputs_normalized, 1)
             score_normalized = outputs_normalized[0][preds[0]].item()
             pred = self.class_names[preds[0]]
 
-            return pred, score_normalized
+        return pred, score_normalized
 
 # Main
 def main():
@@ -149,7 +144,6 @@ def main():
     total_time_class = 0
     total_time_save_image = 0
     total_time_demo = 0
-    list_results = []
     colormap = cm.get_cmap('gist_rainbow', len(class_names))
 
     while(True):
@@ -159,7 +153,7 @@ def main():
         # If the frame was not grabbed, we wait and try again for a while
         if not ret:
             idx_notgrabbed += 1
-            if idx_notgrabbed > 500:
+            if idx_notgrabbed > 10:
                 print_and_log('\nVideo ended or webcam disconnected', log=log)
                 break
             print_and_log('Could not read frame', log=log)
@@ -182,13 +176,12 @@ def main():
                 'pred': pred,
                 'score': round(float(score),3)
             }}
-        list_results.append(json_data)
 
         with open('current_detection.json', 'w') as f:
-            json.dump(list_results, f)
+            json.dump(json_data, f)
                     
         if args.save_json_file:
-            write_json(list_results, json_file)
+            write_json(json_data, json_file)
 
         if args.save_frames:
             tmp_time = time.time()
@@ -209,10 +202,11 @@ def main():
                 cv2.imwrite(os.path.join(demo_images_path, '%08d.png' % (idx)), img_vis)
             if args.show_demo:
                 cv2.imshow('Demo images (press q to stop)', img_vis)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
             total_time_demo += time.time() - tmp_time
         idx+=1
+        
 
     time_elapsed = time.time() - start_time
     print_and_log("%d frames processed in %.2fs -> %.2ffps" % (idx, time_elapsed, idx/time_elapsed), log=log)

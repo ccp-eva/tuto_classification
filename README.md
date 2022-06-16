@@ -7,7 +7,20 @@ The gap between what is achieve in the computer vision field, and the computer v
 
 In this tutorial, we shall solve a simple classification task with one provided dataset, and if you have time, your own dataset! Let's hope you can do the same with a more serious scientific question in your future projects!
 
+![](video_demo_output.gif)
+
 # Installation
+
+<!--
+For organization:
+``` bash
+# to create md5sums files
+find -type f -exec md5sum "{}" + > MD5SUMS
+# to create env .yml files
+conda env export --name ME22_env --file environment_with_versions.yml
+conda env export --name ME22_env --from-history --file environment.yml
+```
+-->
 
 Before coming to the workshop, make sure to set your computer or borow a computer. 64bit computer is requiered. GPU is advised. See the [Workshop ML part Confluence Page](https://ccp-eva.atlassian.net/wiki/external/231442020/NzM0MTJiYzVlZjk5NDJlZWJiYzY3ZTNhZWQyZDhlOTU?atlOrigin=eyJpIjoiMmJlM2Q0NzY3MTM2NGI0NGIyMmIzYjMxMDc3Y2RhNGMiLCJwIjoiYyJ9).
 
@@ -23,24 +36,12 @@ You should have downloaded the github repo. This repo should contain several pyt
 
 ``` bash
 # Create the conda environment (you can change the name and location)
-conda env create --prefix ./env --file environment.yml # or environment_with_versions.yml
+conda env create --prefix ./env --file environment_with_versions.yml # or environment.yml
 # Activate the conda environment
 conda activate ./env
 ```
 
 # The first steps
-
-<!--
-For organization:
-``` bash
-# to create md5sums files
-find -type f -exec md5sum "{}" + > MD5SUMS
-# to create env .yml files
-conda env export --name ME22_env --file environment_with_versions.yml
-conda env export --name ME22_env --from-history --file environment.yml
-```
--->
-
 
 The next steps may be done before the woorkshop and any bug/difficulties may be reported to the organizers.
 
@@ -63,10 +64,17 @@ These steps should create several folders:
 
 Finally, use one of the output folder of script 3 to run the demo app. It shall use your camera and indicate the infered class of your model.
 
-```
+``` bash
 # Run your app
-python 4_run_app.py [path_of_you_trained_model_folder]
+python 4_run_app.py [path_of_you_trained_model_folder] --show-demo
+```
 
+You can also run the app with an external video:
+
+
+``` bash
+# Run your app
+python 4_run_app.py [path_of_you_trained_model_folder] --video-input video_test.mp4 --show-demo
 ```
 
 ## Commun issues
@@ -80,13 +88,13 @@ Solve by running:
 conda install -c anaconda pillow=6.1
 ```
 
-- images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into account with opencv.
+- images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into with some librairies.
 
-- Error showing image opencv when running script 4:
+- Error showing image opencv when running script 4 with camera.
 ``` bash
 cv2.error: OpenCV(3.4.2) /tmp/build/80754af9/opencv-suite_1535558553474/work/modules/highgui/src/window.cpp:632: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
 ```
-Solve by running:
+The following solution may lead with no longer be able to process videos. Meaning run script 1 and script 4 with a video. Solution: by running ():
 ``` bash
 conda remove opencv
 # If python version > 3.6
