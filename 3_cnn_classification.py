@@ -137,6 +137,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25, log=None,
 
     for epoch in range(num_epochs):
         print_and_log('Epoch %d/%d' % (epoch, num_epochs - 1), log=log)
+        import pdb; pdb.set_trace()
 
         # Each epoch has a training and validation phase
         for phase in ['train', 'validation']:
