@@ -255,7 +255,7 @@ if __name__ == '__main__':
     # Just normalization for validation
     data_transforms = {
         'train': transforms.Compose([
-            transforms.RandomResizedCrop(224),
+            transforms.RandomResizedCrop(25), # transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.RandomGrayscale(),
             transforms.RandomRotation(180),
