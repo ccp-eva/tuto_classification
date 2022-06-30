@@ -137,7 +137,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25, log=None,
 
     for epoch in range(num_epochs):
         print_and_log('Epoch %d/%d' % (epoch, num_epochs - 1), log=log)
-        import pdb; pdb.set_trace()
 
         # Each epoch has a training and validation phase
         for phase in ['train', 'validation']:
@@ -246,7 +245,7 @@ if __name__ == '__main__':
     step_size = 5
     # lr = 0.001
     lr = 0.00001
-    batch_size=2
+    batch_size = 64
     print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d, batch_size=%d' % (lr, num_epochs, step_size, batch_size), log=log)
 
     model_wts = torch.load(args.model_wts_path)
@@ -255,7 +254,7 @@ if __name__ == '__main__':
     # Just normalization for validation
     data_transforms = {
         'train': transforms.Compose([
-            transforms.RandomResizedCrop(25), # transforms.RandomResizedCrop(224),
+            transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.RandomGrayscale(),
             transforms.RandomRotation(180),
