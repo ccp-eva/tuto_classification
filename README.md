@@ -11,6 +11,8 @@ In this tutorial, we shall solve a simple classification task with one provided 
 
 # Installation
 
+
+
 <!--
 For organization:
 ``` bash
@@ -32,13 +34,52 @@ git clone https://github.com/ccp-eva/tuto_classification.git
 cd tuto_classification
 ```
 
-You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda that you have installed previously, and the provided `.yml` files
+You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda that you have installed previously.
+
+## For linux based platform
+
+### With .yml files
+
+For linux platform, the provided `.yml` files should help you replicated the environment.
 
 ``` bash
 # Create the conda environment (you can change the name and location)
 conda env create --prefix ./env --file environment_with_versions.yml # or environment.yml
 # Activate the conda environment
 conda activate ./env
+```
+
+### From scratch
+
+``` bash
+# Create a new environment with python 3.7 for compatibility with the different librairies
+conda create -n ./env python=3.7
+# Install pytorch
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+# Install opencv
+conda install -c conda-forge opencv 
+```
+
+## For MAC
+
+``` bash
+# Create a new environment with python 3.7 for compatibility with the different librairies
+conda create -n ./env python=3.7
+# Install pytorch
+conda install pytorch torchvision torchaudio -c pytorch
+# Install opencv
+conda install -c conda-forge opencv 
+```
+
+## For Windows
+
+``` bash
+# Create a new environment with python 3.7 for compatibility with the different librairies
+conda create -n ./env python=3.7
+# Install pytorch
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+# Install opencv
+conda install -c conda-forge opencv 
 ```
 
 # The first steps
