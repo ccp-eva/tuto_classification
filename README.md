@@ -53,38 +53,53 @@ conda activate ./env
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies
-conda create -n ./env python=3.7
+conda create -n env_tuto python=3.7
+conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
 # Install opencv
-conda install -c conda-forge opencv 
+conda install -c conda-forge opencv
+# Install matplotlib
+conda install -c conda-forge matplotlib
+# Install scikit learn
+conda install -c anaconda scikit-learn 
 ```
 
 ## For MAC
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies
-conda create -n ./env python=3.7
+conda create -n env_tuto python=3.7
+conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio -c pytorch
 # Install opencv
-conda install -c conda-forge opencv 
+conda install -c conda-forge opencv
+# Install matplotlib
+conda install -c conda-forge matplotlib
+# Install scikit learn
+conda install -c anaconda scikit-learn 
 ```
 
 ## For Windows
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies
-conda create -n ./env python=3.7
+conda create -n env_tuto python=3.7
+conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
 # Install opencv
 conda install -c conda-forge opencv 
+# Install matplotlib
+conda install -c conda-forge matplotlib
+# Install scikit learn
+conda install -c anaconda scikit-learn 
 ```
 
 # The first steps
 
-The next steps may be done before the woorkshop and any bug/difficulties may be reported to the organizers.
+The next steps may be done before the workshop and any bug/difficulties may be reported to the organizers.
 
 ``` bash
 # Extract frames from videos
@@ -100,7 +115,6 @@ python 3_cnn_classification.py my_dataset_framewise_split
 These steps should create several folders:
 - a log folder for script 1 and 2.
 - a few images to represent your datasets.
-
 - cnn_classification_output folder for script 3. It should contain a folder for each call of the function. The latest should contain the weights of the model your just trained on the given dataset, and some images representing its performance.
 
 Finally, use one of the output folder of script 3 to run the demo app. It shall use your camera and indicate the infered class of your model.
@@ -128,9 +142,7 @@ Solve by running:
 ``` bash
 conda install -c anaconda pillow=6.1
 ```
-
 - images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into with some librairies.
-
 - Error showing image opencv when running script 4 with camera.
 ``` bash
 cv2.error: OpenCV(3.4.2) /tmp/build/80754af9/opencv-suite_1535558553474/work/modules/highgui/src/window.cpp:632: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
@@ -143,7 +155,6 @@ conda install python=3.6
 conda install -c menpo opencv3
 ```
 The torch version may have been affected. Therefore you will have to re-run script 3 before be able to use script 4.
-
 - CUDA Error. There may come from various reason. Then use cpu in script 3 and 4 by setting the device variable to cpu.
 ```
 python 3_cnn_classification.py my_dataset_framewise_split --device cpu

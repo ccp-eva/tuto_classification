@@ -245,8 +245,8 @@ if __name__ == '__main__':
     step_size = 5
     # lr = 0.001
     lr = 0.00001
-    batch_size=64
-    print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d' % (lr, num_epochs, step_size), log=log)
+    batch_size=5
+    print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d, batch_size=%d' % (lr, num_epochs, step_size, batch_size), log=log)
 
     model_wts = torch.load(args.model_wts_path)
 
