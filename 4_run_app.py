@@ -1,4 +1,4 @@
-import os
+from utils import *
 import torch
 print('PyTorch version: ', torch.__version__)
 from torchvision import models, transforms
@@ -11,7 +11,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 from PIL import Image
 from matplotlib import cm
 from argparse import ArgumentParser
-from utils import *
 
 '''
 Definition of the CNN model
