@@ -1,5 +1,4 @@
 from utils import *
-import os
 from argparse import ArgumentParser
 import datetime
 
