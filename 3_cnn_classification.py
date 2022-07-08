@@ -1,3 +1,4 @@
+from utils import *
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -8,13 +9,11 @@ from torchvision import datasets, models, transforms
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import time
-import os
 import gc
 import copy
 import datetime
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
-from utils import *
 from argparse import ArgumentParser
 
 
