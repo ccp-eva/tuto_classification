@@ -1,8 +1,7 @@
-import os
+from utils import *
 from argparse import ArgumentParser
 import shutil
 import datetime
-from utils import *
 
 def split_database(database, output_path, train_percentage=.6, val_percentage=.2, test_percentage=.2, video_wise=False, log=None):
     list_categories = [f for f in os.listdir(database) if os.path.isdir(os.path.join(database,f))]
