@@ -57,10 +57,8 @@ conda create -n env_tuto python=3.7
 conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
-# Install opencv
-conda install -c conda-forge opencv
-# Install matplotlib
-conda install -c conda-forge matplotlib
+# Install opencv and matplotlib
+conda install -c conda-forge opencv matplotlib
 # Install scikit learn
 conda install -c anaconda scikit-learn 
 ```
@@ -73,10 +71,8 @@ conda create -n env_tuto python=3.7
 conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio -c pytorch
-# Install opencv
-conda install -c conda-forge opencv
-# Install matplotlib
-conda install -c conda-forge matplotlib
+# Install opencv and matplotlib
+conda install -c conda-forge opencv matplotlib
 # Install scikit learn
 conda install -c anaconda scikit-learn 
 ```
@@ -89,10 +85,8 @@ conda create -n env_tuto python=3.7
 conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
-# Install opencv
-conda install -c conda-forge opencv 
-# Install matplotlib
-conda install -c conda-forge matplotlib
+# Install opencv and matplotlib
+conda install -c conda-forge opencv matplotlib
 # Install scikit learn
 conda install -c anaconda scikit-learn 
 ```
