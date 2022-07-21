@@ -135,6 +135,11 @@ python 4_run_app.py [path_of_you_trained_model_folder] --video-input video_test.
 
 ## Commun issues
 
+- images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into with some librairies.
+- not enough space when running script 3 - happen when cpu is not powerful enough.
+Solved by lowering the `batch_size` variable l.247 to `10` or even `2`.
+- problem with allocation of process in script 3 - happen when resctricted in cpu power/number.
+Solved by lowering the `num_workers` variable l.248 to `0`.
 - Import error with PIL:
 ``` bash
 ImportError: cannot import name 'PILLOW_VERSION' from 'PIL' (/home/pemartin/Documents/MPI/Projects/tuto_classification/env/lib/python3.7/site-packages/PIL/__init__.py)
@@ -143,7 +148,6 @@ Solve by running:
 ``` bash
 conda install -c anaconda pillow=6.1
 ```
-- images are 90° clockwise rotated: not an error. Internal rotation of the device is not taken into with some librairies.
 - Error showing image opencv when running script 4 with camera.
 ``` bash
 cv2.error: OpenCV(3.4.2) /tmp/build/80754af9/opencv-suite_1535558553474/work/modules/highgui/src/window.cpp:632: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'

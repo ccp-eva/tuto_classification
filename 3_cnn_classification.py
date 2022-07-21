@@ -244,7 +244,8 @@ if __name__ == '__main__':
     step_size = 5
     # lr = 0.001
     lr = 0.00001
-    batch_size = 64
+    batch_size = 64 # 10 or even 2 if not enough memory
+    num_workers = 5 # 0 if not enough cpu power
     print_and_log('With the parameters: lr=%g, num_epochs=%d, step_size=%d, batch_size=%d' % (lr, num_epochs, step_size, batch_size), log=log)
 
     model_wts = torch.load(args.model_wts_path)
@@ -278,7 +279,7 @@ if __name__ == '__main__':
                                             data_transforms[x])
                     for x in ['train', 'validation', 'test']}
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size,
-                                                shuffle=True, num_workers=10)
+                                                shuffle=True, num_workers=num_workers)
                 for x in ['train', 'validation', 'test']}
     dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'validation', 'test']}
     class_names = image_datasets['train'].classes
