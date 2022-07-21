@@ -1,5 +1,5 @@
 *See the [Workshop Webpage](https://www.primate-cognition.eu/de/veranstaltungen/bridging-the-technological-gap-workshop.html) for the context of this tutorial.* <br>
-*See the [Workshop ML part Confluence Page](https://ccp-eva.atlassian.net/wiki/external/231442020/NzM0MTJiYzVlZjk5NDJlZWJiYzY3ZTNhZWQyZDhlOTU?atlOrigin=eyJpIjoiMmJlM2Q0NzY3MTM2NGI0NGIyMmIzYjMxMDc3Y2RhNGMiLCJwIjoiYyJ9) for initial installation steps and further interactive content.*
+*See the [Workshop Hands-on Instructions](https://www.primate-cognition.eu/de/veranstaltungen/bridging-the-technological-gap-workshop/hands-on-sessions) for initial installation steps.*
 
 # Introduction
 
@@ -22,19 +22,21 @@ conda env export --name ME22_env --from-history --file environment.yml
 ```
 -->
 
-Before coming to the workshop, make sure to set your computer or borrow a computer. 64bit computer is requiered. GPU and CUDA is advised but not mandatory.
+Before coming to the workshop, make sure to set your computer. 64bit computer is requiered. GPU and CUDA is advised but not mandatory. For simplicity, we use anaconda to install the requiered librairies.
 
-Then in your terminal, follow the following steps:
+In your termianl (or conda prompt) opened at the right location (folder dedicated to the workshop - use ```cd``` to navigate in your folders), follow the next steps:
 
 ``` bash
-# Clone baseline repo via command line or manually using the browser: download zip file, extract it in appropriate location and open a terminal in tuto_classification folder
+# Clone baseline repo via command line using git or manually using the browser: download zip file, extract it in appropriate location and open a terminal in tuto_classification folder
+## Install git if not already installed
+conda install -c anaconda git
 ## git function for cloning
 git clone https://github.com/ccp-eva/tuto_classification.git
 ## cd function to go to your directory
 cd tuto_classification
 ```
 
-You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda that you have installed previously.
+You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda.
 
 ## Replicate environment
 
@@ -51,7 +53,7 @@ conda env create -f environment.yml
 conda activate env_workshop
 ```
 
-### From scratch
+### From scratch (if previous did not work)
 
 #### For linux based platform
 
@@ -71,8 +73,8 @@ conda install -c anaconda scikit-learn
 #### For MAC
 
 ``` bash
-# Create a new environment with python 3.7 for compatibility with the different librairies
-conda create -n env_tuto python=3.7
+# Create a new environment with python 3.9 for compatibility with the different librairies
+conda create -n env_tuto python=3.9
 conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio -c pytorch
@@ -85,8 +87,8 @@ conda install -c anaconda scikit-learn
 #### For Windows
 
 ``` bash
-# Create a new environment with python 3.7 for compatibility with the different librairies
-conda create -n env_tuto python=3.7
+# Create a new environment with python 3.9 for compatibility with the different librairies
+conda create -n env_tuto python=3.9
 conda activate env_tuto
 # Install pytorch
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
