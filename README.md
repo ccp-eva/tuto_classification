@@ -98,7 +98,7 @@ conda install -c conda-forge opencv matplotlib
 conda install -c anaconda scikit-learn 
 ```
 
-# Run de code
+# Run the code
 
 The next steps may be done before the workshop and any bug/difficulties may be reported to the organizers.
 
