@@ -36,7 +36,9 @@ cd tuto_classification
 
 You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda that you have installed previously.
 
-## Replicate environment with .yml files (preferred)
+## Replicate environment
+
+### With .yml files (preferred)
 
 This environment is the same than the one provided in the [Gaze Workshop](https://github.com/erkil1452/gaze_workshop_public). If already installed, you can just activate if by running: `conda activate env_workshop`.
 
@@ -49,9 +51,9 @@ conda env create -f environment.yml
 conda activate env_workshop
 ```
 
-## From scratch
+### From scratch
 
-### For linux based platform
+#### For linux based platform
 
 
 ``` bash
@@ -66,7 +68,7 @@ conda install -c conda-forge opencv matplotlib
 conda install -c anaconda scikit-learn 
 ```
 
-## For MAC
+#### For MAC
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies
@@ -80,7 +82,7 @@ conda install -c conda-forge opencv matplotlib
 conda install -c anaconda scikit-learn 
 ```
 
-## For Windows
+#### For Windows
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies
@@ -94,7 +96,7 @@ conda install -c conda-forge opencv matplotlib
 conda install -c anaconda scikit-learn 
 ```
 
-# The first steps
+# Run de code
 
 The next steps may be done before the workshop and any bug/difficulties may be reported to the organizers.
 
