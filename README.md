@@ -42,7 +42,7 @@ You should have downloaded the github repo. This repo should contain several pyt
 
 This environment is the same than the one provided in the [Gaze Workshop](https://github.com/erkil1452/gaze_workshop_public). If already installed, you can just activate if by running: `conda activate env_workshop`.
 
-For all platforms, the provided `.yml` files should help you replicated the environment. Conda shall do the rest to make it work.
+For all platforms, the provided `.yml` file should help you replicated the environment. Conda shall do the rest to make it work.
 
 ``` bash
 # Create the conda environment (you can change the name and location)
