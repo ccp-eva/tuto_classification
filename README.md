@@ -140,6 +140,7 @@ python 4_run_app.py [path_of_you_trained_model_folder] --video-input video_test.
 Solved by lowering the `batch_size` variable l.247 to `10` or even `2`.
 - problem with allocation of process in script 3 - happen when resctricted in cpu power/number.
 Solved by lowering the `num_workers` variable l.248 to `0`.
+- problem with logging and special characters. You may ignore this error is the code continues. The log file will just be incomplete.
 - Import error with PIL:
 ``` bash
 ImportError: cannot import name 'PILLOW_VERSION' from 'PIL' (/home/pemartin/Documents/MPI/Projects/tuto_classification/env/lib/python3.7/site-packages/PIL/__init__.py)
