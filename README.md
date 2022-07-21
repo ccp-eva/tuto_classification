@@ -11,8 +11,6 @@ In this tutorial, we shall solve a simple classification task with one provided 
 
 # Installation
 
-
-
 <!--
 For organization:
 ``` bash
@@ -24,32 +22,34 @@ conda env export --name ME22_env --from-history --file environment.yml
 ```
 -->
 
-Before coming to the workshop, make sure to set your computer or borow a computer. 64bit computer is requiered. GPU is advised. See the [Workshop ML part Confluence Page](https://ccp-eva.atlassian.net/wiki/external/231442020/NzM0MTJiYzVlZjk5NDJlZWJiYzY3ZTNhZWQyZDhlOTU?atlOrigin=eyJpIjoiMmJlM2Q0NzY3MTM2NGI0NGIyMmIzYjMxMDc3Y2RhNGMiLCJwIjoiYyJ9).
+Before coming to the workshop, make sure to set your computer or borrow a computer. 64bit computer is requiered. GPU and CUDA is advised but not mandatory.
 
 Then in your terminal, follow the following steps:
 
 ``` bash
-# Clone baseline repo via command line or manually using the browser: download zip file and extract file.
+# Clone baseline repo via command line or manually using the browser: download zip file, extract it in appropriate location and open a terminal in tuto_classification folder
+## git function for cloning
 git clone https://github.com/ccp-eva/tuto_classification.git
+## cd function to go to your directory
 cd tuto_classification
 ```
 
 You should have downloaded the github repo. This repo should contain several python file. In order to all have the same installation environment, we will use conda that you have installed previously.
 
-## For linux based platform
+## Replicate environment with .yml files (preferred)
 
-### With .yml files
-
-For linux platform, the provided `.yml` files should help you replicated the environment.
+For all platforms, the provided `.yml` files should help you replicated the environment. Conda shall do the rest to make it work.
 
 ``` bash
 # Create the conda environment (you can change the name and location)
-conda env create --prefix ./env --file environment_with_versions.yml # or environment.yml
+conda env create -f environment.yml
 # Activate the conda environment
-conda activate ./env
+conda activate env_workshop
 ```
 
-### From scratch
+### For linux based platform
+
+## From scratch
 
 ``` bash
 # Create a new environment with python 3.7 for compatibility with the different librairies

@@ -240,7 +240,7 @@ if __name__ == '__main__':
     session_path = os.path.join('cnn_classification_output', args.database, 'weighted_loss_%s' % (args.weighted_loss), datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     os.makedirs(session_path)
     log = setup_logger('logger_name', os.path.join(session_path, 'log.txt'))
-    num_epochs = 10
+    num_epochs = 4
     step_size = 5
     # lr = 0.001
     lr = 0.00001
