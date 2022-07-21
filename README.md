@@ -145,7 +145,7 @@ Solved by lowering the `num_workers` variable l.248 to `0`.
 ``` bash
 ImportError: cannot import name 'PILLOW_VERSION' from 'PIL' (/home/pemartin/Documents/MPI/Projects/tuto_classification/env/lib/python3.7/site-packages/PIL/__init__.py)
 ```
-Solve by running:
+Solved by running:
 ``` bash
 conda install -c anaconda pillow=6.1
 ```
